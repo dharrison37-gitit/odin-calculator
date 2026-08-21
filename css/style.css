@@ -17,9 +17,10 @@ body {
 }
 
 .container {
+    background-color: lightblue;
     width: 300px;
-    height: 500px;
-    background-color: rgb(100 100 100 / 50%);
+    height: 400px;
+    border: 1px solid;
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -36,4 +37,36 @@ body {
     color: black;
     text-align: right;
     padding: 0 8px;
+}
+
+button {
+    width: 50px;
+}
+
+#button-container {
+    width: 90%;
+    height: 250px;
+    display: flex;
+    justify-content: space-evenly;
+    /* align-items: start; */
+    margin: 30px;
+}
+
+.numbers {
+    flex: 1;
+    width: 75%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.operators {
+    /* width: 10%; */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.operators button {
+    flex: 1;
 }
