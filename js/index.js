@@ -32,33 +32,32 @@ function operate() {
             result = multiply(prev, curr);
             break;
         case "/":
+            if (curr === 0) {
+                displayError();
+                return;
+            }
             result = divide(prev, curr);
             break;
         default:
             break;
     }
-    current = result.toLocaleString("en-US", {
+    result.toLocaleString("en-US", {
         minimumFractionalDigits: 0,
         maximumFractionalDigits: 7,
     });
-    operator = "";
+
+    current = result;
     previous = "";
-    updateDisplay(current);
+    display.value = "";
+    updateDisplay(result);
 }
 
-function appendTheNumber(value) {
-    current = value;
-    updateDisplay(current);
-}
-
-function appendTheOperator(value) {
+function setOperation(value) {
     if (current === "") return;
 
     if (previous !== "") {
-        display.textContent = "";
         operate();
     }
-    updateDisplay(value);
 
     operator = value;
     previous = current;
@@ -66,14 +65,25 @@ function appendTheOperator(value) {
 }
 
 function updateDisplay(value) {
-    display.textContent += value;
+    display.value = value;
+}
+
+function displayError() {
+    display.value = "Not today bro!";
+    clear();
+}
+
+function clear() {
+    current = "";
+    previous = "";
+    operator = "";
 }
 
 let current = "";
 let previous = "";
 let operator = "";
 
-const display = document.querySelector("#display");
+const display = document.querySelector("#num-input");
 const numberPad = document.querySelector("#numbers");
 const operation = document.querySelector("#operators");
 const equalKey = document.querySelector("#equals");
@@ -82,26 +92,33 @@ const clearKey = document.querySelector("#clear");
 // handle all number key events
 numberPad.addEventListener("click", (e) => {
     if (!e.target.classList.contains("btn")) return;
-    appendTheNumber(e.target.closest("button").textContent);
+
+    if (operator) {
+        display.value = "";
+    }
+    current += e.target.closest("button").textContent;
+    updateDisplay(current);
 });
 
 // handle all operator events
 operation.addEventListener("click", (e) => {
     if (!e.target.classList.contains("btn") || e.target.textContent === "C")
         return;
-    appendTheOperator(e.target.closest("button").textContent);
+    if (!current && previous) return;
+
+    current = display.value;
+    setOperation(e.target.closest("button").textContent);
 });
 
 // handle equal key only
 equalKey.addEventListener("click", (e) => {
-    display.textContent = "";
+    // display.value = "";
+    if (!operator) return;
     operate();
 });
 
 // handle clear key only
 clearKey.addEventListener("click", (e) => {
-    current = "";
-    previous = "";
-    operator = "";
-    display.textContent = "";
+    clear();
+    display.value = "";
 });
