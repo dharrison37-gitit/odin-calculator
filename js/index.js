@@ -53,6 +53,8 @@ function operate() {
 }
 
 function setOperation(value) {
+    if (value === "." && current.value.includes(".")) return;
+
     if (current === "") return;
 
     if (previous !== "") {
@@ -93,10 +95,17 @@ const clearKey = document.querySelector("#clear");
 numberPad.addEventListener("click", (e) => {
     if (!e.target.classList.contains("btn")) return;
 
+    let currentButton = e.target.closest("button").textContent;
+    console.log(typeof current);
+    if (current.toString().includes(".") && currentButton === ".") {
+        return;
+    }
+
     if (operator) {
         display.value = "";
     }
-    current += e.target.closest("button").textContent;
+
+    current += currentButton;
     updateDisplay(current);
 });
 
@@ -112,7 +121,6 @@ operation.addEventListener("click", (e) => {
 
 // handle equal key only
 equalKey.addEventListener("click", (e) => {
-    // display.value = "";
     if (!operator) return;
     operate();
 });
