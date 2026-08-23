@@ -1,23 +1,24 @@
 "use strict";
 
-function add(op1, op2) {
-    return op1 + op2;
-}
+let current = "";
+let previous = "";
+let operator = "";
+let result = "0";
 
-function subtract(op1, op2) {
-    return op1 - op2;
-}
+const display = document.querySelector("#num-input");
+const numberPad = document.querySelector("#numbers");
+const operation = document.querySelector("#operators");
+const equalKey = document.querySelector("#equals");
+const clearKey = document.querySelector("#clear");
 
-function multiply(op1, op2) {
-    return op1 * op2;
-}
+const add = (op1, op2) => op1 + op2;
+const subtract = (op1, op2) => op1 - op2;
+const multiply = (op1, op2) => op1 * op2;
+const divide = (op1, op2) => op1 / op2;
 
-function divide(op1, op2) {
-    return op1 / op2;
-}
+const updateDisplay = () => (display.value = current === "" ? "0" : current);
 
 function operate() {
-    let result = 0;
     const prev = Number(previous);
     const curr = Number(current);
 
@@ -41,15 +42,10 @@ function operate() {
         default:
             break;
     }
-    result.toLocaleString("en-US", {
-        minimumFractionalDigits: 0,
-        maximumFractionalDigits: 7,
-    });
-
-    current = result;
+    current = Number(result.toFixed(7));
     previous = "";
     display.value = "";
-    updateDisplay(result);
+    updateDisplay();
 }
 
 function setOperation(value) {
@@ -66,10 +62,6 @@ function setOperation(value) {
     current = "";
 }
 
-function updateDisplay(value) {
-    display.value = value;
-}
-
 function displayError() {
     display.value = "Not today bro!";
     clear();
@@ -79,24 +71,18 @@ function clear() {
     current = "";
     previous = "";
     operator = "";
+    result = "0";
 }
-
-let current = "";
-let previous = "";
-let operator = "";
-
-const display = document.querySelector("#num-input");
-const numberPad = document.querySelector("#numbers");
-const operation = document.querySelector("#operators");
-const equalKey = document.querySelector("#equals");
-const clearKey = document.querySelector("#clear");
 
 // handle all number key events
 numberPad.addEventListener("click", (e) => {
+    if (current === result) return;
+    // make sure button is clicked and not the parent
     if (!e.target.classList.contains("btn")) return;
 
     let currentButton = e.target.closest("button").textContent;
-    console.log(typeof current);
+
+    // prevent decimal point from being pressed
     if (current.toString().includes(".") && currentButton === ".") {
         return;
     }
@@ -106,7 +92,7 @@ numberPad.addEventListener("click", (e) => {
     }
 
     current += currentButton;
-    updateDisplay(current);
+    updateDisplay();
 });
 
 // handle all operator events
