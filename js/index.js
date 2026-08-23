@@ -72,6 +72,7 @@ function clear() {
     previous = "";
     operator = "";
     result = "0";
+    updateDisplay();
 }
 
 // handle all number key events
@@ -114,5 +115,6 @@ equalKey.addEventListener("click", (e) => {
 // handle clear key only
 clearKey.addEventListener("click", (e) => {
     clear();
-    display.value = "";
 });
+
+updateDisplay();
