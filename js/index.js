@@ -10,6 +10,7 @@ const numberPad = document.querySelector("#numbers");
 const operation = document.querySelector("#operators");
 const equalKey = document.querySelector("#equals");
 const clearKey = document.querySelector("#clear");
+const deleteKey = document.querySelector("#delete");
 
 const add = (op1, op2) => op1 + op2;
 const subtract = (op1, op2) => op1 - op2;
@@ -80,7 +81,8 @@ function clear() {
 numberPad.addEventListener("click", (e) => {
     if (current === result) return;
     // make sure button is clicked and not the parent
-    if (!e.target.classList.contains("btn")) return;
+    if (!e.target.classList.contains("btn") || e.target.textContent === "DEL")
+        return;
 
     let currentButton = e.target.closest("button").textContent;
 
@@ -99,8 +101,13 @@ numberPad.addEventListener("click", (e) => {
 
 // handle all operator events
 operation.addEventListener("click", (e) => {
-    if (!e.target.classList.contains("btn") || e.target.textContent === "C")
+    if (
+        !e.target.classList.contains("btn") ||
+        e.target.textContent === "C" ||
+        e.target.textContent === "DEL"
+    )
         return;
+
     if (!current && previous) return;
 
     current = display.value;
@@ -116,6 +123,11 @@ equalKey.addEventListener("click", (e) => {
 // handle clear key only
 clearKey.addEventListener("click", (e) => {
     clear();
+});
+
+deleteKey.addEventListener("click", (e) => {
+    current = current.slice(0, -1);
+    updateDisplay();
 });
 
 updateDisplay();
