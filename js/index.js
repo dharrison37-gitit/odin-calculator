@@ -42,9 +42,10 @@ function operate() {
         default:
             break;
     }
-    current = Number(result.toFixed(7));
+    result = Number(result.toFixed(7));
+    current = result;
     previous = "";
-    display.value = "";
+    // display.value = "";
     updateDisplay();
 }
 
