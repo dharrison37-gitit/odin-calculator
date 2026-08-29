@@ -46,7 +46,6 @@ function operate() {
     result = Number(result.toFixed(7));
     current = result;
     previous = "";
-    // display.value = "";
     updateDisplay();
 }
 
